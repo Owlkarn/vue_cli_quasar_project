@@ -44,8 +44,14 @@ const routes = [
   {
     path: '/:pathMatch(.*)*',
     name: 'error404',
+    redirect: '/404',
+  },
+  {
+    path: '/404',
+    name: 'NotFound',
     component: Error404Component
   },
+
 ];
 
 export default routes
