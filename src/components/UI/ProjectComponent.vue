@@ -36,7 +36,7 @@ export default {
         <h3 class="project__subscribe_title">{{ projectData.name }}</h3>
         <p class="project__subscribe_text">{{ projectData.text }}</p>
       </div>
-      <ButtonWithArrowComponent class="project__btn" @click="goToProjectDetails"/>
+      <ButtonWithArrowComponent class="project__btn" @click="goToProjectDetails(projectData.projectId + 1)"/>
     </div>
   </article>
 </template>

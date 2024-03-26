@@ -7,29 +7,45 @@ import {filterData} from "src/utils/filterUtils";
 export default {
   name: "ArticleFilterBlockComponent",
   components: {ArticlesListComponent, TagComponent},
+  props: ['articleId', 'articleTag'],
   data() {
     return {
+      isFiltering: false,
     };
   },
   methods: {
     filterArticles(event, tag) {
+      this.isFiltering = true;
       filterData(event, tag,
           'articles-list__article',
           'articles-list-block__right_tag-active',
           this.getArticlesList);
+      if (document.querySelectorAll('.articles-list-block__right_tag-active').length === 0)
+      {
+        this.$router.push({ name: 'blog_details_noFilter' });
+      } else {
+        this.$router.push({ name: 'blog_details_filter', params: { tag: tag} });
+      }
+    },
+    findArticleById(id) {
+      return this.getArticlesList.find(article => article.articleId === id);
     }
   },
   computed: {
-    ...mapGetters(['getArticlesList', 'getTagList'])
-  }
-
+    ...mapGetters(['getArticlesList', 'getTagList']),
+  },
 }
 </script>
 
 <template>
   <div class="articles-list-block center">
     <article class="articles-list-block__left">
-      <ArticlesListComponent v-for="(article, index) in getArticlesList" :key="index" :article="article"/>
+      <ArticlesListComponent v-if="articleId && !isFiltering"
+                             :article="findArticleById(parseInt(articleId))"
+                             :class="{ selectedArticle: true }"/>
+      <ArticlesListComponent :style="{ display:'none' }"
+                             v-for="(article, index) in getArticlesList"
+                             :key="index" :article="article"/>
     </article>
     <article class="articles-list-block__right">
       <h3 class="articles-list-block__right_title">Tags</h3>

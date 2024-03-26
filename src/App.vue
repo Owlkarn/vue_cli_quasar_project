@@ -8,9 +8,9 @@ import 'assets/fonts/stylesheet.css'
 defineOptions({
   name: 'App',
 
-  created() {
-    this.$router.push({name: 'home'})
-  }
+  // created() {
+  //   this.$router.push({name: 'home'})
+  // }
 });
 </script>
 

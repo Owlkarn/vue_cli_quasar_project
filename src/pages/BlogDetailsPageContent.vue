@@ -9,6 +9,11 @@ export default {
   name: "BlogDetailsPageComponent",
   data() {
     return {
+      articleId: this.$route.params.id,
+      articleTag: this.$route.params.tag,
+      //нужно в ArticleFilterBlockComponent передать id и
+      // сделать там вывод статей так, что первой идет статья с переданным Id,
+      // потом все остальные статьи с тэгом от этой статьи
     }
   },
   computed: {
@@ -21,7 +26,7 @@ export default {
 <template>
   <HeaderComponent/>
   <MainBlogComponent :mainImg="getLargeMainImgs[1]"/>
-  <ArticleFilterBlockComponent/>
+  <ArticleFilterBlockComponent :articleId="articleId" :articleTag="articleTag"/>
   <FooterComponent/>
 </template>
 

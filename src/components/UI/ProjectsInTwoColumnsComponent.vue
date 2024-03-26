@@ -5,30 +5,40 @@ export default {
   name: "ProjectsInTwoColumnsComponent",
   components: {ProjectComponent},
   props:['projectsData'],
+  data() {
+    return {
+      leftColumnProjects: [],
+      rightColumnProjects: [],
+    };
+  },
   mounted() {
     this.inputProjectsInTwoColumns();
   },
   methods: {
-    inputProjectsInTwoColumns() {
-      const projectEl = document.querySelector('.projectsInTwoColumns__project');
-      this.projectsData.slice(1).forEach(project => {
-        const cloneProjectEl = projectEl.cloneNode(true);
-        const rightColumnEl = document.querySelector('.projectsInTwoColumns__right-column');
-        const leftColumnEl = document.querySelector('.projectsInTwoColumns__left-column');
-        cloneProjectEl.querySelector('.project__img').setAttribute('src', project.imgUrl);
-        cloneProjectEl.querySelector('.project__subscribe_title').setAttribute('src', project.name);
-        cloneProjectEl.querySelector('.project__subscribe_text').setAttribute('src', project.text);
-        cloneProjectEl.querySelector('.project__star').style.display = project.isFavourite ? 'block' : 'none';
-        cloneProjectEl.querySelector('.project__btn').addEventListener('click', () => this.goToProjectDetails(this.projectsData.indexOf(project)));
-        setTimeout(() => {
-          if (this.getColumnHeight(leftColumnEl) <= this.getColumnHeight(rightColumnEl)) {
-            leftColumnEl.appendChild(cloneProjectEl);
-          } else {
-            rightColumnEl.appendChild(cloneProjectEl);
-          }
-        }, 200);
-      })
+    async inputProjectsInTwoColumns() {
+      let leftColumnHeight = 0;
+      let rightColumnHeight = 0;
+      const leftColumnEl = this.$refs.leftColumn;
+      const rightColumnEl = this.$refs.rightColumn;
+
+      for (const project of this.projectsData) {
+        console.log(leftColumnHeight + ' | ' + rightColumnHeight);
+        if (leftColumnHeight <= rightColumnHeight) {
+          this.leftColumnProjects.push(project);
+          await this.delay(50);
+          leftColumnHeight = await this.getColumnHeight(leftColumnEl);
+        } else {
+          this.rightColumnProjects.push(project);
+          await this.delay(50);
+          rightColumnHeight = await this.getColumnHeight(rightColumnEl);
+        }
+      }
     },
+
+    async delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    },
+
     getColumnHeight(column) {
       const columnEls = column.querySelectorAll('.project__img');
       let height = 0;
@@ -38,7 +48,6 @@ export default {
       return height;
     },
     goToProjectDetails(projectId) {
-      console.log("Нажата кнопка проекта с идентификатором:", projectId);
       this.$router.push({ name: 'project_details', params: { id: projectId } });
     }
   }
@@ -47,12 +56,23 @@ export default {
 
 <template>
   <div class="projectsInTwoColumns center">
-    <div class="projectsInTwoColumns__left-column">
-      <ProjectComponent class="projectsInTwoColumns__project"
-                        :projectData="projectsData[0]"
-                        :goToProjectDetails="() => goToProjectDetails(this.projectsData.indexOf(projectsData[0]))"/>
+    <div class="projectsInTwoColumns__left-column" ref="leftColumn">
+      <ProjectComponent
+        v-for="project in leftColumnProjects"
+        :key="project.projectId"
+        :projectData="project"
+        :goToProjectDetails="() => goToProjectDetails(project.projectId)"
+        class="projectsInTwoColumns__project"
+      />
     </div>
-    <div class="projectsInTwoColumns__right-column">
+    <div class="projectsInTwoColumns__right-column" ref="rightColumn">
+      <ProjectComponent
+        v-for="project in rightColumnProjects"
+        :key="project.projectId"
+        :projectData="project"
+        :goToProjectDetails="() => goToProjectDetails(project.projectId)"
+        class="projectsInTwoColumns__project"
+      />
     </div>
   </div>
 </template>

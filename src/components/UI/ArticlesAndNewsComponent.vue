@@ -9,6 +9,11 @@ export default {
     return {
     };
   },
+  methods: {
+    goToBlogDetails(articleTag, articleId) {
+      this.$router.push({ name: 'blog_details', params: { tag: articleTag, id: articleId } });
+  }
+  },
   computed: {
     displayedArticles() {
       return this.articlesAndNews.slice(0, this.articlesAndNewsOptions.numberOfTitles);
@@ -33,7 +38,8 @@ export default {
         <h3 class="article__title">{{ article.title }}</h3>
         <div class="article__date-and-btn">
           <p class="article__date-and-btn_date">{{ article.date }}</p>
-          <ButtonWithArrowComponent class="article__date-and-btn_btn"/>
+          <ButtonWithArrowComponent class="article__date-and-btn_btn"
+                                    @click="goToBlogDetails(article.tag, article.articleId)"/>
         </div>
       </article>
     </div>

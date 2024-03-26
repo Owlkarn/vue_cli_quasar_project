@@ -10,17 +10,13 @@ export default {
   name: "ProjectDetailsComponent",
   data() {
     return {
-      projectId: this.$route.params.id,
+      projectId: this.$route.params.id - 1,
     }
   },
   components: {CarouselComponent, ProjectDetailsTextComponent, MainBlogComponent, FooterComponent, HeaderComponent},
   computed: {
     ...mapGetters(['getLargeMainImgs', 'getProjectDetailsText', 'getProjectsData'])
   },
-  mounted() {
-    const projectId = this.$route.params.id;
-    console.log('Индекс проекта:', projectId);
-  }
 }
 </script>
 

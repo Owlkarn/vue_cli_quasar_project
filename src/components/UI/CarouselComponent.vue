@@ -32,12 +32,12 @@ export default {
     infinite
     thumbnails
     @mouseenter="showNavigation=true"
-    @mouseleave="showNavigation=true"
+    @mouseleave="showNavigation=false"
   >
-    <q-carousel-slide :name="1" :img-src='this.projectData.imgUrl' />
-    <q-carousel-slide :name="2" img-src="https://cdn.quasar.dev/img/parallax1.jpg" />
-    <q-carousel-slide :name="3" img-src="https://cdn.quasar.dev/img/parallax2.jpg" />
-    <q-carousel-slide :name="4" img-src="https://cdn.quasar.dev/img/quasar.jpg" />
+    <q-carousel-slide :name="1" :img-src='this.projectData.fullImg' />
+    <q-carousel-slide :name="2" :img-src='this.projectData.fullImg' />
+    <q-carousel-slide :name="3" :img-src='this.projectData.fullImg' />
+    <q-carousel-slide :name="4" :img-src='this.projectData.fullImg' />
 
     <template v-slot:control>
       <transition name="fade">
@@ -77,6 +77,7 @@ export default {
 }
 .q-carousel {
   min-height: 800px;
+  width: auto;
 }
 .btn-fullscreen {
   width: 30px;
